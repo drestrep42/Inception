@@ -1,0 +1,23 @@
+# Tells MariaDB that these settings apply to the server engine daemon (mysqld) 
+# and not the backup tools or command-line client software.
+[mysqld]
+
+# Listen on all network interfaces so the Debian VM can connect
+# Without this, it defaults to localhost, only listening within the container.
+bind-address = 0.0.0.0
+
+# Default MySQL/MariaDB network port
+port = 3306
+
+# Defines where to create the internal Unix socket file.
+# Path to the internal file used for fast local communication
+socket = /var/run/mysqld/mysqld.sock
+
+# Folder inside the container where actual data and tables are stored
+datadir = /var/lib/mysql
+
+# File path where database errors and crash logs are written
+log-error = /var/log/mysql/error.log
+
+# File tracking the active Linux process ID for management scripts
+pid-file = /var/run/mysqld/mysqld.pid

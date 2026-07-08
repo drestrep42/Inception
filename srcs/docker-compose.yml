@@ -1,0 +1,14 @@
+# Version?
+
+services:
+  mariadb:
+    build:
+      context: requirements/mariadb/
+    image: mariadb:inception
+    container_name: mariadb
+    networks:
+      - inception-network
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    environment:
+      
