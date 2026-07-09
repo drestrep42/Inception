@@ -7,6 +7,11 @@ mkdir -p /etc/nginx/ssl
 # Default domain if not provided
 : "${DOMAIN_NAME:=localhost}"
 
+# 1. Substitute environment variables into the real nginx.conf
+# We use '$DOMAIN_NAME' to tell envsubst ONLY to replace that specific variable, 
+# preventing it from messing up native Nginx variables like $host or $uri.
+envsubst '$DOMAIN_NAME' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
+
 # Generate SSL certificate if it doesn't exist
 if [ ! -f /etc/nginx/ssl/nginx.crt ]; then
     echo "Generating self-signed SSL certificate for ${DOMAIN_NAME}..."
