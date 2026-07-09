@@ -48,6 +48,8 @@ services:
       - wordpress
     networks:
       - inception-network
+    ports:
+      - "443:443"
     volumes:
       - wordpress_data:/var/www/html
     environment:
