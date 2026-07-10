@@ -1,6 +1,7 @@
 # Variables
 COMPOSE_FILE = srcs/docker-compose.yml
 DATA_DIR = /home/$(USER)/data
+VOLUMES = mariadb_data wordpress_data
 
 .PHONY: all build up down clean fclean re
 
@@ -13,12 +14,17 @@ $(DATA_DIR)/mariadb:
 $(DATA_DIR)/wordpress:
 	mkdir -p $(DATA_DIR)/wordpress
 
+# Create named volumes
+volumes:
+	docker volume create --driver local --opt type=none --opt o=bind --opt device=$(DATA_DIR)/mariadb mariadb_data
+	docker volume create --driver local --opt type=none --opt o=bind --opt device=$(DATA_DIR)/wordpress wordpress_data
+
 # Build images
-build: $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
+build: $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress volumes
 	docker compose -f $(COMPOSE_FILE) build
 
 # Start services
-up:
+up: volumes
 	docker compose -f $(COMPOSE_FILE) up -d
 
 # Stop services
@@ -32,7 +38,7 @@ clean:
 
 # Full clean including volumes
 fclean: clean
-	docker volume prune -f
+	docker volume rm -f $(VOLUMES)
 	sudo rm -rf $(DATA_DIR)
 
 # Rebuild everything
