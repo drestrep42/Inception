@@ -7,6 +7,11 @@ if [ -n "$MYSQL_ROOT_PASSWORD_FILE" ] && [ -f "$MYSQL_ROOT_PASSWORD_FILE" ]; the
     export MYSQL_ROOT_PASSWORD
 fi
 
+if [ -n "$MYSQL_USER_FILE" ] && [ -f "$MYSQL_USER_FILE" ]; then
+    MYSQL_USER=$(cat "$MYSQL_USER_FILE")
+    export MYSQL_USER
+fi
+
 if [ -n "$MYSQL_PASSWORD_FILE" ] && [ -f "$MYSQL_PASSWORD_FILE" ]; then
     MYSQL_PASSWORD=$(cat "$MYSQL_PASSWORD_FILE")
     export MYSQL_PASSWORD

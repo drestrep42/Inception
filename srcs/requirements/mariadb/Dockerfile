@@ -34,21 +34,12 @@ COPY tools/init_db.sh /usr/local/bin/
 # Without this step, Linux will block the container from running the script.
 RUN chmod +x /usr/local/bin/init_db.sh
 
-# 7. ENVIRONMENT VARIABLES
-# Defines default configuration values. Your 'init_db.sh' script will look at these 
-# variables when the container starts up to know what database and users to create.
-# These can be easily overridden when running 'docker run'.
-ENV MYSQL_ROOT_PASSWORD=root \
-    MYSQL_DATABASE=app_db \
-    MYSQL_USER=app_user \
-    MYSQL_PASSWORD=app_pass
-
-# 8. PORT EXPOSURE
+# 7. PORT EXPOSURE
 # Documents that the container will listen on network port 3306 (the standard MySQL/MariaDB port). 
 # Note: This doesn't actually publish the port to your host machine; it acts as internal documentation.
 EXPOSE 3306
 
-# 9. CONTAINER STARTUP COMMAND
+# 8. CONTAINER STARTUP COMMAND
 # Configures the exact command that executes the moment the container spawns. 
 # It triggers your 'init_db.sh' script to configure and start the database.
 ENTRYPOINT ["init_db.sh"]

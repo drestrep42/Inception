@@ -11,10 +11,11 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_USER_FILE: /run/secrets/db_user
       MYSQL_PASSWORD_FILE: /run/secrets/db_password
     secrets:
       - db_root_password
+      - db_user
       - db_password
     restart: always
 
@@ -30,13 +31,28 @@ services:
     volumes:
       - wordpress_data:/var/www/html
     environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
       WORDPRESS_DB_HOST: mariadb
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
-      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_USER_FILE: /run/secrets/db_user
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
       WORDPRESS_TABLE_PREFIX: wp_
+      WORDPRESS_SITE_TITLE: ${WORDPRESS_SITE_TITLE}
+      WORDPRESS_ADMIN_USER_FILE: /run/secrets/wp_admin_user
+      WORDPRESS_ADMIN_PASSWORD_FILE: /run/secrets/wp_admin_password
+      WORDPRESS_ADMIN_EMAIL_FILE: /run/secrets/wp_admin_email
+      WORDPRESS_NEW_USER_FILE: /run/secrets/wp_user
+      WORDPRESS_NEW_USER_PASSWORD_FILE: /run/secrets/wp_user_password
+      WORDPRESS_NEW_USER_EMAIL_FILE: /run/secrets/wp_user_email
     secrets:
+      - db_user
       - db_password
+      - wp_admin_user
+      - wp_admin_password
+      - wp_admin_email
+      - wp_user
+      - wp_user_password
+      - wp_user_email
     restart: always
 
   nginx:
@@ -71,5 +87,19 @@ volumes:
 secrets:
   db_root_password:
     file: ../secrets/db_root_password.txt
+  db_user:
+    file: ../secrets/db_user.txt
   db_password:
     file: ../secrets/db_password.txt
+  wp_admin_user:
+    file: ../secrets/wp_admin_user.txt
+  wp_admin_password:
+    file: ../secrets/wp_admin_password.txt
+  wp_admin_email:
+    file: ../secrets/wp_admin_email.txt
+  wp_user:
+    file: ../secrets/wp_user.txt
+  wp_user_password:
+    file: ../secrets/wp_user_password.txt
+  wp_user_email:
+    file: ../secrets/wp_user_email.txt
